@@ -1,0 +1,9 @@
+src/
+│── common/        # Utility functions, guards, interceptors, etc.
+│── config/        # Configuration files (e.g., database, environment)
+│── modules/
+│   ├── auth/      # Authentication module
+│   ├── users/     # User module
+│   ├── products/  # Product module
+│   ├── orders/    # Order module
+│── main.ts        # Entry point of the application
