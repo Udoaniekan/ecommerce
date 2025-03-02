@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UsersModule } from "./modules/users.module";
 import { AuthModule } from "./modules/auth.module";
+import { ProductsModule } from "./modules/products.module";
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { AuthModule } from "./modules/auth.module";
     MongooseModule.forRoot(process.env.MONGO_URI),
     UsersModule,
     AuthModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}
