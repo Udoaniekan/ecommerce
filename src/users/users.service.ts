@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -9,8 +9,12 @@ import { User, UserDocument } from './schema/user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(SignDto:SignDto): Promise<User> {
-    const { email, password } = SignDto;
+  
+  async createUser(payload:SignDto): Promise<User> {
+    payload.email = payload.email.toLowerCase();
+    const { email, password } = payload;
+    const isUser = await this.userModel.findOne({email});
+  if(isUser) throw new HttpException('sorry user with this email already exist', 400);
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.userModel.create({ email, password: hashedPassword });
   }
