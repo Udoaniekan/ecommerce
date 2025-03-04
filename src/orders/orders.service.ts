@@ -15,8 +15,7 @@ export class OrdersService {
     const cart = await this.cartService.getCart(userId);
     if (!cart || cart.items.length === 0) throw new NotFoundException('Cart is empty');
 
-    const totalAmount = cart.items.reduce((sum, item) => sum + item.quantity * 100, 0); // Assume each item is 100
-
+    const totalAmount = cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
     const order = new this.orderModel({ userId, items: cart.items, totalAmount });
     await order.save();
 

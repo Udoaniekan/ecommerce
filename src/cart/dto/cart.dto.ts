@@ -7,4 +7,8 @@ export class AddToCartDto {
   @IsNumber()
   @Min(1)
   quantity: number;
+
+  @IsNumber()
+  @Min(1)
+  price: number;
 }

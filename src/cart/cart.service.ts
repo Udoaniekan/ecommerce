@@ -11,7 +11,7 @@ export class CartService {
   async getCart(userId: string): Promise<Cart> {
     const cart = await this.cartModel.findOne({ userId });
     if (!cart) {
-      return new this.cartModel({ userId, items: [] });
+      return new this.cartModel({ userId, items: []  });
     }
     return cart;
   }
@@ -20,7 +20,7 @@ export class CartService {
     let cart = await this.cartModel.findOne({ userId });
 
     if (!cart) {
-      cart = new this.cartModel({ userId, items: [] });
+      cart = new this.cartModel({ userId, items: []});
     }
 
     const existingItem = cart.items.find((item) => item.productId === addToCartDto.productId);
