@@ -13,6 +13,7 @@ export class OrdersService {
 
   async createOrder(userId: string): Promise<Order> {
     const cart = await this.cartService.getCart(userId);
+    console.log(cart);
     if (!cart || cart.items.length === 0) throw new NotFoundException('Cart is empty');
 
     const totalAmount = cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0);

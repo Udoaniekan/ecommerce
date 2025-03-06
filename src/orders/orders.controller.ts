@@ -9,7 +9,7 @@ export class OrdersController {
 
   @Post()
   createOrder(@Req() req) {
-    return this.ordersService.createOrder(req.user.userId);
+    return this.ordersService.createOrder(req.user.id);
   }
 
   @Get()

@@ -10,12 +10,14 @@ export class CartController {
 
   @Get()
   getCart(@Req() req) {
-    return this.cartService.getCart(req.user.userId);
+    return this.cartService.getCart(req.user.id);
   }
 
   @Post()
   addToCart(@Req() req, @Body() addToCartDto: AddToCartDto) {
-    return this.cartService.addToCart(req.user.userId, addToCartDto);
+    const id = this.cartService.addToCart(req.user.id, addToCartDto);
+    console.log(id);
+    return id; 
   }
 
   @Delete(':productId')
