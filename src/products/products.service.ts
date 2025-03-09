@@ -42,4 +42,13 @@ export class ProductsService {
     }
     return { message: 'Product deleted successfully' };
   }
+
+  async price(id: string): Promise<number> {
+    const product = await this.productModel.findById(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    return product.price;
+  }
+
 }

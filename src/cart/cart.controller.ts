@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Delete, Param, Body, UseGuards, Req } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { AddToCartDto } from './dto/cart.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('cart')
@@ -13,12 +12,15 @@ export class CartController {
     return this.cartService.getCart(req.user.id);
   }
 
-  @Post()
-  addToCart(@Req() req, @Body() addToCartDto: AddToCartDto) {
-    const id = this.cartService.addToCart(req.user.id, addToCartDto);
-    console.log(id);
-    return id; 
+  @Post(':userId/add')
+  async addToCart(
+    @Param('userId') userId: string,
+    @Body('productId') productId: string,
+    @Body('quantity') quantity: number,
+  ) {
+    return this.cartService.addToCart(userId, productId, quantity);
   }
+
 
   @Delete(':productId')
   removeFromCart(@Req() req, @Param('productId') productId: string) {

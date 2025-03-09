@@ -2,11 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Cart } from './schemas/cart.schema';
-import { AddToCartDto } from './dto/cart.dto';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class CartService {
-  constructor(@InjectModel(Cart.name) private cartModel: Model<Cart>) {}
+  constructor(@InjectModel(Cart.name) private cartModel: Model<Cart>,
+  private readonly productService: ProductsService, // Inject ProductService
+) {}
 
   async getCart(userId: string): Promise<Cart> {
     const cart = await this.cartModel.findOne({ userId });
@@ -16,18 +18,21 @@ export class CartService {
     return cart;
   }
 
-  async addToCart(userId: string, addToCartDto: AddToCartDto): Promise<Cart> {
+  async addToCart(userId: string, productId: string, quantity: number): Promise<Cart> {
+
+    const price = await this.productService.price(productId); // Get price from productService
+
     let cart = await this.cartModel.findOne({ userId });
 
     if (!cart) {
       cart = new this.cartModel({ userId, items: []});
     }
 
-    const existingItem = cart.items.find((item) => item.productId === addToCartDto.productId);
+    const existingItem = cart.items.find((item) => item.productId === productId);
     if (existingItem) {
-      existingItem.quantity += addToCartDto.quantity;
+      existingItem.quantity += quantity;
     } else {
-      cart.items.push(addToCartDto);
+      cart.items.push({productId, quantity, price});
     }
 
     return cart.save();
